@@ -1,11 +1,11 @@
 const mongoose = require("../db/conn");
 const { Schema } = mongoose;
 
-const User = mongoose.model(
-  "User",
+const Cronograma = mongoose.model(
+  "Cronograma",
   new Schema(
     {
-      tarefas: {
+      tarefa: {
         type: String,
         required: true,
       },
@@ -27,4 +27,4 @@ const User = mongoose.model(
   )
 )
 
-module.exports = User;
+module.exports = Cronograma;

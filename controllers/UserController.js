@@ -9,27 +9,27 @@ module.exports = class UserController {
 
     //validations
     if (!name) {
-      res.status(422).json({ message: "Nome obrigatório" });
+      res.status(422).json({ message: "Nome é obrigatório!" });
       return;
     }
     if (!email) {
-      res.status(422).json({ message: "email obrigatório" });
+      res.status(422).json({ message: "E-mail é obrigatório!" });
       return;
     }
     if (!phone) {
-      res.status(422).json({ message: "phone obrigatório" });
+      res.status(422).json({ message: "Telefone é obrigatório!" });
       return;
     }
     if (!password) {
-      res.status(422).json({ message: "password obrigatório" });
+      res.status(422).json({ message: "Senha é obrigatória!" });
       return;
     }
     if (!confirmpassword) {
-      res.status(422).json({ message: "confirmação de password obrigatório" });
+      res.status(422).json({ message: "Confirmação de Senha é obrigatória!" });
       return;
     }
     if (password !== confirmpassword) {
-      res.status(422).json({ message: "Senha e confirmação não são iguais" });
+      res.status(422).json({ message: "Senha e confirmação não são iguais!" });
     return
     } 
     
@@ -51,7 +51,7 @@ module.exports = class UserController {
     const userExists = await User.findOne({email: email})
 
     if (userExists) {
-        res.status(422).json({message: 'E-mail já cadastrado'})
+        res.status(422).json({message: 'E-mail já cadastrado!'})
         return
     }
 
