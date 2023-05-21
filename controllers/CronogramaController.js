@@ -2,7 +2,8 @@ const Cronograma = require("../models/Cronograma");
 
 //Helpers
 const getToken = require("../helpers/get-token")
-const getUserByTOken = require("../helpers/get-user-by-token")
+const getUserByToken = require("../helpers/get-user-by-token");
+const ObjectId = require('mongoose').Types.ObjectId
 
 module.exports = class CronogramaController {
     // Criar Cronograma
@@ -30,14 +31,14 @@ module.exports = class CronogramaController {
 
     //Coletar dono da tarefa
     const token = getToken(req)
-    const user = getUserByToken(token)
+    const user = await getUserByToken(token)
     
         //Cria uma nova tarefa.
         const Cronograma = new Cronograma({
             nomeTarefa,
             dificuldade,
             horasDisponiveis,
-            status,
+            statusTarefa,
             user: {
                 _id: user.id,
                 name: user.name,
@@ -46,7 +47,11 @@ module.exports = class CronogramaController {
         })
         try {
 
-            const 
+            const newCronograma = await Cronograma.save()
+            res.status(201).json({
+                message: 'Tarefa criada com sucesso!',
+                newCronograma,
+            })
 
         } catch (error) {
 
@@ -54,5 +59,62 @@ module.exports = class CronogramaController {
 
         }
 
+    }
+
+    //resgata todas as tarefas
+    static async getAll(req, res) {
+        const Cronograma = await Cronograma.find().sort('-createdAt')
+
+        res.status(200).json({
+            Cronograma: Cronograma,
+        })
+    }
+
+    //resgatar cronograma do usuario
+    static async getAllUserCronogamas(req, res) {
+
+        //get user from token
+        const token = getToken(req)
+        const user = await getUserByToken(token)
+
+        const Cronograma = await Cronograma.find({'user._id': user._id}).sort('-createdAt')
+
+        res.status(200).json({
+            Cronograma,
+        })
+    }
+
+    //resgatar tarefas do usuario
+    static async getAllUserTarefas(req, res) {
+
+        //get user from token
+        const token = getToken(req)
+        const user = await getUserByToken(token)
+
+        const Cronograma = await Cronograma.find({'Tarefas._id': user._id}).sort('-createdAt')
+
+        res.status(200).json({
+            Cronograma,
+        })
+    }
+
+    //resgatar tarefas via ID
+    static async getTarefaById(req, res) {
+        const id = req.params.id
+        
+        if(!ObjectId.isValid()) {
+            res.status(422).json({ message: "ID inválido!" });
+            return
+         }
+        
+        const Tarefa = await Tarefa.findOne({_id: id})
+
+        if(!Tarefa) {
+            res.status(404).json({message: 'Tarefa não encontrada!'})
+        }
+
+        res.status(200).json({
+            Tarefa: Tarefa,
+        })
     }
 }
