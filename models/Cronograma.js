@@ -5,7 +5,7 @@ const Cronograma = mongoose.model(
   "Cronograma",
   new Schema(
     {
-      tarefa: {
+      nomeTarefa: {
         type: String,
         required: true,
       },
@@ -17,7 +17,7 @@ const Cronograma = mongoose.model(
         type: Number,
         required: true,
       },
-      status: {
+      statusTarefa: {
         type: Boolean,
       },
       user: Object,
